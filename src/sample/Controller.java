@@ -58,13 +58,14 @@ public class Controller {
 
 	public void initialize() {
 
-		
+		// modele
 		model=new Model(this);
 		model.setColor(colorPicker.getValue());
 		rdbSelectMove.setSelected(true);
 
 		ToggleGroup toggle=rdbRectangle.getToggleGroup();
 		
+		// on ajoute un listener pour tous les radioButton liés entre eux (tous)
 		toggle.selectedToggleProperty().addListener(new ChangeListener<Toggle>()  
         { 
             public void changed(ObservableValue<? extends Toggle> ob, Toggle o, Toggle n) 
@@ -78,8 +79,9 @@ public class Controller {
                     else model.selectionner();
                 } 
             } 
-        }); 
+        });
 		
+		// change la couleur dans le modele en fonction 
 		colorPicker.setOnAction(new EventHandler() {
 		     public void handle(Event t) {
 		         Color c = colorPicker.getValue();
