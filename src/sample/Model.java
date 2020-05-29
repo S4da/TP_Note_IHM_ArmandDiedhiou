@@ -88,7 +88,6 @@ public class Model {
 	}
 			
 	public boolean estSelectionne(Shape s) {
-		System.out.println(indexSelectionne);
 		boolean selec=false;
 		if (indexSelectionne>=0) {
 			if (s instanceof Rectangle && listeObj.get(indexSelectionne) instanceof Rectangle) {

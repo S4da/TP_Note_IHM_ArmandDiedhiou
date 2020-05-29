@@ -101,7 +101,6 @@ public class Controller {
                         public void handle(MouseEvent t) {
                         	if (model.getPeutSelectionner()) {
 	                        	if (!model.estSelectionne(rectangle)) {
-	            	            	System.out.println("bonjour");
 	            	            	rectangle.setWidth(rectangle.getWidth()+8);
 	            	                rectangle.setHeight(rectangle.getHeight()+8);
 	            	                model.setSelected(rectangle);
@@ -131,7 +130,6 @@ public class Controller {
                         public void handle(MouseEvent t) {
                         	if (model.getPeutSelectionner()) {
 	                        	if (!model.estSelectionne(ellipse)) {
-	            	            	System.out.println("bonjour");
 	            	            	ellipse.setRadiusX(ellipse.getRadiusX()+8);
 	                        		ellipse.setRadiusY(ellipse.getRadiusY()+8);
 	            	                model.setSelected(ellipse);
@@ -159,7 +157,6 @@ public class Controller {
                         public void handle(MouseEvent t) {
                         	if (model.getPeutSelectionner()) {
 	                        	if (!model.estSelectionne(line)) {
-	            	            	System.out.println("bonjour");
 	            	            	line.setStrokeWidth(14);
 	            	                model.setSelected(line);
 	                        	}
@@ -215,6 +212,35 @@ public class Controller {
             			}
             			else if (s instanceof Line) {
             				canvas.getChildren().remove((Line)s);
+            			}
+            		}
+            	}
+            }
+        });
+		
+		btnClone.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+            	if (model.getPeutSelectionner()) {
+            		Shape s=model.getSelected();
+            		if (s!=null) {
+            			if (s instanceof Rectangle) {
+            				model.deselect();
+            				Rectangle ancien = (Rectangle)s;
+            				Rectangle copie = copierRectangle(ancien);
+            				canvas.getChildren().add(copie);
+            			}
+            			else if (s instanceof Ellipse) {
+            				model.deselect();
+            				Ellipse ancien = (Ellipse)s;
+            				Ellipse copie = copierEllipse(ancien);
+            				canvas.getChildren().add(copie);
+            			}
+            			else if (s instanceof Line) {
+            				model.deselect();
+            				Line ancien = (Line)s;
+            				Line copie = copierLine(ancien);
+            				canvas.getChildren().add(copie);
             			}
             		}
             	}
@@ -280,26 +306,121 @@ public class Controller {
 		l.setEndX(x);
         l.setEndY(y);
 	}
+
 	
-	/*
-	private void drawRectangle(GraphicsContext gc2, Rectangle rec){
-        double canvasWidth = gc2.getCanvas().getWidth();
-        double canvasHeight = gc2.getCanvas().getHeight();
+	private Rectangle copierRectangle(Rectangle ancien) {
+		Rectangle copie=new Rectangle();
+		copie.setX(ancien.getX()+20);
+		copie.setY(ancien.getY()+20);
+		copie.setWidth(ancien.getWidth());
+		copie.setHeight(ancien.getHeight());
+		copie.requestFocus();
+		copie.setFill(ancien.getFill());
+        copie.setStrokeWidth(ancien.getStrokeWidth());
+        copie.setStroke(copie.getFill());
+        copie.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent t) {
+            	if (model.getPeutSelectionner()) {
+                	if (!model.estSelectionne(copie)) {
+    	            	copie.setWidth(copie.getWidth()+20);
+    	            	copie.setHeight(copie.getHeight()+20);
+    	                model.setSelected(copie);
+                	}
+            	}
+            }
+        });
+		copie.setOnMouseDragged(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent t) {
+            	if (model.estSelectionne(copie)) {
+            		copie.setX(t.getX());
+            		copie.setY(t.getY());
+            	}
+            }
+        });
+		model.ajouterForme(copie);
+		return copie;
+	}
+	
+	private Ellipse copierEllipse(Ellipse ancien) {
+		
+		Ellipse ellipse = new Ellipse();
+        ellipse.setCenterX(ancien.getCenterX()+20);
+        ellipse.setCenterY(ancien.getCenterY()+20);
+        ellipse.setRadiusX(ancien.getRadiusX());
+        ellipse.setRadiusY(ancien.getRadiusY());
+        
+        ellipse.setFill(ancien.getFill());
+        ellipse.setStrokeWidth(ancien.getStrokeWidth());
+        ellipse.setStroke(ancien.getStroke());
+        ellipse.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent t) {
+            	if (model.getPeutSelectionner()) {
+                	if (!model.estSelectionne(ellipse)) {
+    	            	ellipse.setRadiusX(ellipse.getRadiusX()+8);
+                		ellipse.setRadiusY(ellipse.getRadiusY()+8);
+    	                model.setSelected(ellipse);
+                	}
+            	}
+            }     	
+        });
+		ellipse.setOnMouseDragged(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent t) {
+            	if (model.estSelectionne(ellipse)) {
+            		ellipse.setCenterX(t.getX());
+                	ellipse.setCenterY(t.getY());
+            	}
+            }
+        });
+		model.ajouterForme(ellipse);
+        return ellipse;
+	}
+	
+	private Line copierLine(Line ancien) {
+		Line line = new Line();
+        line.setStartX(ancien.getStartX()+20);
+        line.setStartY(ancien.getStartY()+20);
+        line.setEndX(ancien.getEndX()+20);
+        line.setEndY(ancien.getEndY()+20);
+        line.setStrokeWidth(ancien.getStrokeWidth());
+        line.setStroke(ancien.getStroke());
+        line.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent t) {
+            	if (model.getPeutSelectionner()) {
+                	if (!model.estSelectionne(line)) {
+    	            	line.setStrokeWidth(14);
+    	                model.setSelected(line);
+                	}
+            	}
+            }
+        });
+		line.setOnMouseDragged(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent t) {
+            	if (model.estSelectionne(line)) {
+            		double oldX=line.getStartX();
+            		double oldY=line.getStartY();
+            		double newX=t.getX();
+            		double newY=t.getY();
+            		line.setStartX(newX);
+            		line.setStartY(newY);
+            		line.setEndX(line.getEndX()+(newX-oldX));
+            		line.setEndY(line.getEndY()+(newY-oldY));
+            	}
+            }
+        });
+		model.ajouterForme(line);
+		return line;		
+	}
 
-        gc2.setFill(model.getColor());
-        gc2.setStroke(model.getColor());
-        gc2.setLineWidth(5);
-
-        gc2.fill();
-        gc2.strokeRect(
-                rec.getX(),              //x of the upper left corner
-                rec.getY(),              //y of the upper left corner
-                rec.getWidth(),    //width of the rectangle
-                rec.getHeight());  //height of the rectangle
-
-        gc2.setFill(model.getColor());
-        gc2.setStroke(model.getColor());
-        gc2.setLineWidth(1);
-
-    }*/
 }
