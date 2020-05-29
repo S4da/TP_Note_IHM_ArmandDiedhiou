@@ -93,7 +93,20 @@ public class Controller {
             @Override
             public void handle(MouseEvent event) {
             	if (model.getRectangle()) {
-            		model.ajouterForme(initRectangle(event.getX(),event.getY()));
+            		Rectangle rectangle=initRectangle(event.getX(),event.getY());
+            		model.ajouterForme(rectangle);
+            		rectangle.setOnMouseClicked(new EventHandler<MouseEvent>()
+                    {
+                        @Override
+                        public void handle(MouseEvent t) {
+                        	if (!model.estSelectionne(rectangle)) {
+            	            	System.out.println("bonjour");
+            	            	rectangle.setWidth(rectangle.getWidth()+8);
+            	                rectangle.setHeight(rectangle.getHeight()+8);
+            	                model.setSelected(rectangle);
+                        	}
+                        }
+                    });
                 	canvas.getChildren().add(model.getDerniereForme());
             	}else if (model.getEllipse()) {
             		model.ajouterForme(initEllipse(event.getX(),event.getY()));
@@ -126,6 +139,7 @@ public class Controller {
 	// initialiser le rectangle quand l'utilisateur clique
 	private Rectangle initRectangle(double x,double y){
 		Rectangle rectangle = new Rectangle();
+		rectangle.requestFocus();
         rectangle.setX(x);
         rectangle.setY(y);
         rectangle.setWidth(0);
