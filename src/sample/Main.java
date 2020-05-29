@@ -19,6 +19,7 @@ public class Main extends Application {
         primaryStage.setTitle("TP4");
         primaryStage.setScene(new Scene(root, 695, 431));
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
 
 
