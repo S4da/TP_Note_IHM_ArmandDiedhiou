@@ -12,7 +12,7 @@ import javafx.scene.shape.Shape;
 public class Model {
 
 	private Color color;
-	private boolean rectangle=false,ellipse=false,line=false;
+	private boolean rectangle=false,ellipse=false,line=false,selection=false;
 	private Controller controller;
 	ArrayList<Shape> listeObj;
 	int indexSelectionne=-1;
@@ -26,23 +26,28 @@ public class Model {
 		indexSelectionne=-1;
 	}
 	
+	public boolean getPeutSelectionner() {
+		return selection;
+	}
+	
 	public void deselect() {
 		Shape s=listeObj.get(indexSelectionne);
 		if(s instanceof Rectangle) {
 			Rectangle r=(Rectangle)listeObj.get(indexSelectionne);
 			r.setWidth(r.getWidth()-8);
 			r.setHeight(r.getHeight()-8);
-			r.setStroke(Color.BLACK);
+			r.setStroke(color);
 		}else if (s instanceof Ellipse) {
 			Ellipse ellipse=(Ellipse)listeObj.get(indexSelectionne);
 			ellipse.setRadiusX(ellipse.getRadiusX()-8);
     		ellipse.setRadiusY(ellipse.getRadiusY()-8);
-			ellipse.setStroke(Color.BLACK);
+			ellipse.setStroke(color);
 		}else {
 			Line line=(Line)listeObj.get(indexSelectionne);
 			line.setStrokeWidth(10);
 			line.setStroke(lineColor);
 		}
+		indexSelectionne=-1;
 	}
 	public void setSelected(Shape s) {
 		if (indexSelectionne>=0) deselect();
@@ -156,27 +161,34 @@ public class Model {
 		rectangle=false;
 		ellipse=false;
 		line=false;
+		selection=true;
 		System.out.println("rien");
 	}
 	
 	public void drawRectangle() {
+		if (indexSelectionne>=0) deselect();
 		rectangle=true;
 		ellipse=false;
 		line=false;
+		selection=false;
 		System.out.println("rectangle");
 	}
 	
 	public void drawEllipse() {
+		if (indexSelectionne>=0) deselect();
 		ellipse=true;
 		rectangle=false;
 		line=false;
+		selection=false;
 		System.out.println("ellipse");
 	}
 	
 	public void drawLine() {
+		if (indexSelectionne>=0) deselect();
 		ellipse=false;
 		rectangle=false;
 		line=true;
+		selection=false;
 		System.out.println("line");
 	}
 }

@@ -99,11 +99,13 @@ public class Controller {
                     {
                         @Override
                         public void handle(MouseEvent t) {
-                        	if (!model.estSelectionne(rectangle)) {
-            	            	System.out.println("bonjour");
-            	            	rectangle.setWidth(rectangle.getWidth()+8);
-            	                rectangle.setHeight(rectangle.getHeight()+8);
-            	                model.setSelected(rectangle);
+                        	if (model.getPeutSelectionner()) {
+	                        	if (!model.estSelectionne(rectangle)) {
+	            	            	System.out.println("bonjour");
+	            	            	rectangle.setWidth(rectangle.getWidth()+8);
+	            	                rectangle.setHeight(rectangle.getHeight()+8);
+	            	                model.setSelected(rectangle);
+	                        	}
                         	}
                         }
                     });
@@ -127,13 +129,15 @@ public class Controller {
                     {
                         @Override
                         public void handle(MouseEvent t) {
-                        	if (!model.estSelectionne(ellipse)) {
-            	            	System.out.println("bonjour");
-            	            	ellipse.setRadiusX(ellipse.getRadiusX()+8);
-                        		ellipse.setRadiusY(ellipse.getRadiusY()+8);
-            	                model.setSelected(ellipse);
+                        	if (model.getPeutSelectionner()) {
+	                        	if (!model.estSelectionne(ellipse)) {
+	            	            	System.out.println("bonjour");
+	            	            	ellipse.setRadiusX(ellipse.getRadiusX()+8);
+	                        		ellipse.setRadiusY(ellipse.getRadiusY()+8);
+	            	                model.setSelected(ellipse);
+	                        	}
                         	}
-                        }
+                        }     	
                     });
             		ellipse.setOnMouseDragged(new EventHandler<MouseEvent>()
                     {
@@ -153,10 +157,12 @@ public class Controller {
                     {
                         @Override
                         public void handle(MouseEvent t) {
-                        	if (!model.estSelectionne(line)) {
-            	            	System.out.println("bonjour");
-            	            	line.setStrokeWidth(14);
-            	                model.setSelected(line);
+                        	if (model.getPeutSelectionner()) {
+	                        	if (!model.estSelectionne(line)) {
+	            	            	System.out.println("bonjour");
+	            	            	line.setStrokeWidth(14);
+	            	                model.setSelected(line);
+	                        	}
                         	}
                         }
                     });
@@ -208,7 +214,7 @@ public class Controller {
         rectangle.setHeight(0);
         rectangle.setFill(model.getColor());
         rectangle.setStrokeWidth(1);
-        rectangle.setStroke(Color.BLACK);
+        rectangle.setStroke(model.getColor());
         return rectangle;
 	}
 	
@@ -228,7 +234,7 @@ public class Controller {
         
         ellipse.setFill(model.getColor());
         ellipse.setStrokeWidth(1);
-        ellipse.setStroke(Color.BLACK);
+        ellipse.setStroke(model.getColor());
         return ellipse;
 	}
 	
