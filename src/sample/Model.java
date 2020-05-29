@@ -14,35 +14,46 @@ public class Model {
 	private Color color;
 	private boolean rectangle=false,ellipse=false,line=false,selection=false;
 	private Controller controller;
+	// listes de differentes formes présentes dans le pane
 	ArrayList<Shape> listeObj;
 	int indexSelectionne=-1;
 	private Color lineColor;
 	
+	//Constructeur de la classe model
+	public Model(Controller c) {
+		controller=c;
+		listeObj=new ArrayList();
+	}
 	
+	// mise à -1 de l'indice d'element selectionné si aucune forme n'est selectionnée
 	public void setUnselected() {
 		indexSelectionne=-1;
 	}
 	
+	// retourne un booleen si l'utilisateur peut selectionner
 	public boolean getPeutSelectionner() {
 		return selection;
 	}
 	
+	// retourne la forme select
 	public Shape getSelected() {
 		if (indexSelectionne>=0) return listeObj.get(indexSelectionne);
 		else return null;
 	}
+	
+	// fonction pour deselectionner l'element deja selectionné
 	public void deselect() {
 		Shape s=listeObj.get(indexSelectionne);
 		if(s instanceof Rectangle) {
 			Rectangle r=(Rectangle)listeObj.get(indexSelectionne);
 			r.setWidth(r.getWidth()-8);
 			r.setHeight(r.getHeight()-8);
-			r.setStroke(color);
+			r.setStroke(r.getFill());
 		}else if (s instanceof Ellipse) {
 			Ellipse ellipse=(Ellipse)listeObj.get(indexSelectionne);
 			ellipse.setRadiusX(ellipse.getRadiusX()-8);
     		ellipse.setRadiusY(ellipse.getRadiusY()-8);
-			ellipse.setStroke(color);
+			ellipse.setStroke(ellipse.getFill());
 		}else {
 			Line line=(Line)listeObj.get(indexSelectionne);
 			line.setStrokeWidth(10);
@@ -50,6 +61,8 @@ public class Model {
 		}
 		indexSelectionne=-1;
 	}
+	
+	// set la shape ayant ete selectionnée comme celle selectionne dans le modele
 	public void setSelected(Shape s) {
 		if (indexSelectionne>=0) deselect();
 		
@@ -86,7 +99,8 @@ public class Model {
 			}
 		}
 	}
-			
+	
+	// retourne un booleen si la forme passée en parametre est selectionnée		
 	public boolean estSelectionne(Shape s) {
 		boolean selec=false;
 		if (indexSelectionne>=0) {
@@ -114,32 +128,41 @@ public class Model {
 		return selec;
 	}
 	
-	
-	public Model(Controller c) {
-		controller=c;
-		listeObj=new ArrayList();
-	}
-	
+	// ajoute une forme dans la liste des formes presentes dans la vue
 	public void ajouterForme(Shape s) {
 		listeObj.add(s);
 	}
 	
+	// retourne la derniere forme créée dans la vue
 	public Shape getDerniereForme() {
 		return listeObj.get(listeObj.size()-1);
 	}
 	
+	// rend vrai si les bouton radio sont positionnés sur Rectangle
 	public boolean getRectangle() {
 		return rectangle;
 	}
 
+	// rend vrai si les bouton radio sont positionnés sur Ellipse
 	public boolean getEllipse() {
 		return ellipse;
 	}
 
+	// rend vrai si les bouton radio sont positionnés sur Ligne
 	public boolean getLine() {
 		return line;
 	}
 
+	// rend vrai si les bouton radio sont positionnés sur selection/move
+		public void selectionner() {
+			rectangle=false;
+			ellipse=false;
+			line=false;
+			selection=true;
+			System.out.println("rien");
+		}
+		
+	// met color à la couleur donnée par le controlleur
 	public void setColor(Color color) {
 		this.color=color;
 		if (indexSelectionne>=0) {
@@ -153,18 +176,13 @@ public class Model {
 		}
 	}
 	
+	// retourne la couleur actuelle du modele
 	public Color getColor() {
 		return color;
 	}
 	
-	public void selectionner() {
-		rectangle=false;
-		ellipse=false;
-		line=false;
-		selection=true;
-		System.out.println("rien");
-	}
-	
+	// met tout les booleens à faux sauf rectangle a vrai pour signifier qu'un rectangle est
+	// selectionné pour etre tracé
 	public void drawRectangle() {
 		if (indexSelectionne>=0) deselect();
 		rectangle=true;
@@ -174,6 +192,8 @@ public class Model {
 		System.out.println("rectangle");
 	}
 	
+	// met tout les booleens à faux sauf ellipse a vrai pour signifier qu'une ellipse est
+	// selectionné pour etre tracé
 	public void drawEllipse() {
 		if (indexSelectionne>=0) deselect();
 		ellipse=true;
@@ -183,6 +203,8 @@ public class Model {
 		System.out.println("ellipse");
 	}
 	
+	// met tout les booleens à faux sauf ligne a vrai pour signifier qu'une ligne est
+		// selectionné pour etre tracé
 	public void drawLine() {
 		if (indexSelectionne>=0) deselect();
 		ellipse=false;

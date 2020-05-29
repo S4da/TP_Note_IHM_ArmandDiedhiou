@@ -81,7 +81,7 @@ public class Controller {
             } 
         });
 		
-		// change la couleur dans le modele en fonction 
+		// change la couleur dans le modele en fonction du choix
 		colorPicker.setOnAction(new EventHandler() {
 		     public void handle(Event t) {
 		         Color c = colorPicker.getValue();
@@ -89,14 +89,21 @@ public class Controller {
 		     }
 		 });
 		
+		// ajout de l'eventhandler qui permet de selectionner de faire une action en fonction du bouton radio
+		// selectionné
 		canvas.addEventHandler(	MouseEvent.MOUSE_PRESSED, 
                 new EventHandler<MouseEvent>(){
 
             @Override
             public void handle(MouseEvent event) {
+            	
             	if (model.getRectangle()) {
+            		
+            		// initialisation des valeurs de bases du rectangle en fonction du click
             		Rectangle rectangle=initRectangle(event.getX(),event.getY());
             		model.ajouterForme(rectangle);
+            		// si le rectangle est selectionné on créé un nouveau rectangle auquel on ajoute un handler pour 
+                	// la selection du Rectangle
             		rectangle.setOnMouseClicked(new EventHandler<MouseEvent>()
                     {
                         @Override
@@ -110,6 +117,7 @@ public class Controller {
                         	}
                         }
                     });
+            		// ajout d'un eventHander dans le cas du deplacement du rectangle
             		rectangle.setOnMouseDragged(new EventHandler<MouseEvent>()
                     {
                         @Override
@@ -120,12 +128,16 @@ public class Controller {
                         	}
                         }
                     });
+            		// ajout du rectangle dans le pane
                 	canvas.getChildren().add(model.getDerniereForme());
 	
             	}else if (model.getEllipse()) {
+            		// initialisation d'une ellipse en fonction du click de la souris
+            		// dans le cas de la selection du boutonradio Ellipse
             		Ellipse ellipse=initEllipse(event.getX(),event.getY());
             		model.ajouterForme(ellipse);
                 	canvas.getChildren().add(model.getDerniereForme());
+                	// ajout des eventHandler de l'ellipse créé pour cliquer et pour deplacer
                 	ellipse.setOnMouseClicked(new EventHandler<MouseEvent>()
                     {
                         @Override
@@ -150,9 +162,12 @@ public class Controller {
                         }
                     });
             	}else if (model.getLine()) {
+            		// initialisation d'une ligne en fonction du click de la souris
+            		// si le boutonRadio ligne est selectionné
             		Line line=initLine(event.getX(),event.getY());
             		model.ajouterForme(line);
-                	canvas.getChildren().add(model.getDerniereForme());	
+                	canvas.getChildren().add(model.getDerniereForme());
+                	// ajout des eventhandler de la ligne pour gerer la selection et le deplacement de la ligne
                 	line.setOnMouseClicked(new EventHandler<MouseEvent>()
                     {
                         @Override
@@ -185,21 +200,26 @@ public class Controller {
             }
         });
 		
+		// eventHandler permettant de tracer la forme venant d'etre créé apres l'eventHandler MOUSE_PRESSED
 		canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, 
                 new EventHandler<MouseEvent>(){
 			
             @Override
             public void handle(MouseEvent event) {
             	if (model.getRectangle()) {
+            		// fonction permettant de tracer un rectangle venant d'etre créé
             		drawRectangle((Rectangle)model.getDerniereForme(),event.getX(),event.getY());
             	}else if (model.getEllipse()) {
+            		// fonction permettant de tracer l'ellipse venant d'etre créée
             		drawEllipse((Ellipse)model.getDerniereForme(),event.getX(),event.getY());
             	}else if (model.getLine()) {
+            		// fonction permettant de tracer la ligne venant d'etre créée
             		drawLine((Line)model.getDerniereForme(),event.getX(),event.getY());
             	}
             }
         });
 		
+		// eventHandler qui gere l'appuie sur le bouton supprime quand une figure est selectionne
 		btnDelete.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
@@ -220,24 +240,31 @@ public class Controller {
             }
         });
 		
+		//evenHandler du bouton permettant de cloner une forme selectionne
 		btnClone.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
             	if (model.getPeutSelectionner()) {
             		Shape s=model.getSelected();
             		if (s!=null) {
+            			// si la shape selectionne est un rectangle on copie ce rectangle un peu plus bas et on deselectionne
+            			// la forme
             			if (s instanceof Rectangle) {
             				model.deselect();
             				Rectangle ancien = (Rectangle)s;
             				Rectangle copie = copierRectangle(ancien);
             				canvas.getChildren().add(copie);
             			}
+            			// si la shape selectionne est une ellipse on copie cette ellipse un peu plus bas et on deselectionne
+            			// la forme
             			else if (s instanceof Ellipse) {
             				model.deselect();
             				Ellipse ancien = (Ellipse)s;
             				Ellipse copie = copierEllipse(ancien);
             				canvas.getChildren().add(copie);
             			}
+            			// si la shape selectionne est une ligne on copie cette ligne un peu plus bas et on deselectionne
+            			// la forme
             			else if (s instanceof Line) {
             				model.deselect();
             				Line ancien = (Line)s;
@@ -309,7 +336,8 @@ public class Controller {
         l.setEndY(y);
 	}
 
-	
+	// fonction permettant de copier un rectangle dans le pane avec ajout des eventHandler pour la nouvelle 
+	// shape
 	private Rectangle copierRectangle(Rectangle ancien) {
 		Rectangle copie=new Rectangle();
 		copie.setX(ancien.getX()+20);
@@ -347,6 +375,8 @@ public class Controller {
 		return copie;
 	}
 	
+	// fonction permettant de copier une ellipse dans le pane avec ajout des eventHandler pour la nouvelle 
+	// shape
 	private Ellipse copierEllipse(Ellipse ancien) {
 		
 		Ellipse ellipse = new Ellipse();
@@ -385,6 +415,8 @@ public class Controller {
         return ellipse;
 	}
 	
+	// fonction permettant de copier une ligne dans le pane avec ajout des eventHandler pour la nouvelle 
+	// shape
 	private Line copierLine(Line ancien) {
 		Line line = new Line();
         line.setStartX(ancien.getStartX()+20);
