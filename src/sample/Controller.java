@@ -107,13 +107,75 @@ public class Controller {
                         	}
                         }
                     });
+            		rectangle.setOnMouseDragged(new EventHandler<MouseEvent>()
+                    {
+                        @Override
+                        public void handle(MouseEvent t) {
+                        	if (model.estSelectionne(rectangle)) {
+                        		rectangle.setX(t.getX());
+                            	rectangle.setY(t.getY());
+                        	}
+                        }
+                    });
                 	canvas.getChildren().add(model.getDerniereForme());
+	
             	}else if (model.getEllipse()) {
-            		model.ajouterForme(initEllipse(event.getX(),event.getY()));
+            		Ellipse ellipse=initEllipse(event.getX(),event.getY());
+            		model.ajouterForme(ellipse);
                 	canvas.getChildren().add(model.getDerniereForme());
+                	ellipse.setOnMouseClicked(new EventHandler<MouseEvent>()
+                    {
+                        @Override
+                        public void handle(MouseEvent t) {
+                        	if (!model.estSelectionne(ellipse)) {
+            	            	System.out.println("bonjour");
+            	            	ellipse.setRadiusX(ellipse.getRadiusX()+8);
+                        		ellipse.setRadiusY(ellipse.getRadiusY()+8);
+            	                model.setSelected(ellipse);
+                        	}
+                        }
+                    });
+            		ellipse.setOnMouseDragged(new EventHandler<MouseEvent>()
+                    {
+                        @Override
+                        public void handle(MouseEvent t) {
+                        	if (model.estSelectionne(ellipse)) {
+                        		ellipse.setCenterX(t.getX());
+                            	ellipse.setCenterY(t.getY());
+                        	}
+                        }
+                    });
             	}else if (model.getLine()) {
-            		model.ajouterForme(initLine(event.getX(),event.getY()));
+            		Line line=initLine(event.getX(),event.getY());
+            		model.ajouterForme(line);
                 	canvas.getChildren().add(model.getDerniereForme());	
+                	line.setOnMouseClicked(new EventHandler<MouseEvent>()
+                    {
+                        @Override
+                        public void handle(MouseEvent t) {
+                        	if (!model.estSelectionne(line)) {
+            	            	System.out.println("bonjour");
+            	            	line.setStrokeWidth(14);
+            	                model.setSelected(line);
+                        	}
+                        }
+                    });
+            		line.setOnMouseDragged(new EventHandler<MouseEvent>()
+                    {
+                        @Override
+                        public void handle(MouseEvent t) {
+                        	if (model.estSelectionne(line)) {
+                        		double oldX=line.getStartX();
+                        		double oldY=line.getStartY();
+                        		double newX=t.getX();
+                        		double newY=t.getY();
+                        		line.setStartX(newX);
+                        		line.setStartY(newY);
+                        		line.setEndX(line.getEndX()+(newX-oldX));
+                        		line.setEndY(line.getEndY()+(newY-oldY));
+                        	}
+                        }
+                    });
             	}
             }
         });
@@ -152,8 +214,8 @@ public class Controller {
 	
 	// tracer le rectangle en fonction de comment l'utilisateur bouge sa souris
 	private void drawRectangle(Rectangle r,double x,double y) {
-		r.setHeight(y);
-		r.setWidth(x);
+		r.setHeight(Math.abs(y));
+		r.setWidth(Math.abs(x));
 	}
 	
 	// initialiser l'ellipse quand l'utilisateur clique
@@ -172,8 +234,8 @@ public class Controller {
 	
 	// tracer l'ellipse en fonction de comment l'utilisateur bouge sa souris
 	private void drawEllipse(Ellipse e,double x,double y) {
-	e.setRadiusX(x-e.getCenterX());
-	e.setRadiusY(y-e.getCenterY());
+	e.setRadiusX(Math.abs(x-e.getCenterX()));
+	e.setRadiusY(Math.abs(y-e.getCenterY()));
 	}
 	
 	// initialiser la ligne quand l'utilisateur clique

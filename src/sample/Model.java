@@ -16,6 +16,7 @@ public class Model {
 	private Controller controller;
 	ArrayList<Shape> listeObj;
 	int indexSelectionne=-1;
+	private Color lineColor;
 	
 	public int getSelected(){
 		return indexSelectionne;
@@ -31,10 +32,16 @@ public class Model {
 			Rectangle r=(Rectangle)listeObj.get(indexSelectionne);
 			r.setWidth(r.getWidth()-8);
 			r.setHeight(r.getHeight()-8);
+			r.setStroke(Color.BLACK);
 		}else if (s instanceof Ellipse) {
-			
+			Ellipse ellipse=(Ellipse)listeObj.get(indexSelectionne);
+			ellipse.setRadiusX(ellipse.getRadiusX()-8);
+    		ellipse.setRadiusY(ellipse.getRadiusY()-8);
+			ellipse.setStroke(Color.BLACK);
 		}else {
-			
+			Line line=(Line)listeObj.get(indexSelectionne);
+			line.setStrokeWidth(10);
+			line.setStroke(lineColor);
 		}
 	}
 	public void setSelected(Shape s) {
@@ -46,7 +53,7 @@ public class Model {
 				if (r.getX()==((Rectangle)listeObj.get(i)).getX() && r.getY()==((Rectangle)listeObj.get(i)).getY()
 						&& r.getHeight()==((Rectangle)listeObj.get(i)).getHeight() && r.getWidth()==((Rectangle)listeObj.get(i)).getWidth()) {
 					indexSelectionne=i;
-					System.out.println(i);
+					r.setStroke(Color.RED);
 					break;
 				}
 			}
@@ -56,7 +63,7 @@ public class Model {
 				if (e.getCenterX()==((Ellipse)listeObj.get(i)).getCenterX() && e.getCenterY()==((Ellipse)listeObj.get(i)).getCenterY()
 						&& e.getRadiusX()==((Ellipse)listeObj.get(i)).getRadiusX() && e.getRadiusY()==((Ellipse)listeObj.get(i)).getRadiusY()) {
 					indexSelectionne=i;
-					System.out.println(i);
+					e.setStroke(Color.RED);
 					break;
 				}
 			}
@@ -65,7 +72,8 @@ public class Model {
 				if (l.getStartX()==((Line)listeObj.get(i)).getStartX() && l.getStartY()==((Line)listeObj.get(i)).getStartY()
 						&& l.getEndX()==((Line)listeObj.get(i)).getEndX() && l.getEndY()==((Line)listeObj.get(i)).getEndY()) {
 					indexSelectionne=i;
-					System.out.println(i);
+					lineColor=(Color) l.getStroke();
+					l.setStroke(Color.RED);
 					break;
 				}
 						
@@ -129,7 +137,15 @@ public class Model {
 
 	public void setColor(Color color) {
 		this.color=color;
-		System.out.println(this.color);
+		if (indexSelectionne>=0) {
+			if (listeObj.get(indexSelectionne) instanceof Rectangle) {
+				((Rectangle)listeObj.get(indexSelectionne)).setFill(color);
+			}else if (listeObj.get(indexSelectionne) instanceof Ellipse) {
+				((Ellipse)listeObj.get(indexSelectionne)).setFill(color);
+			}else if (listeObj.get(indexSelectionne) instanceof Line) {
+				lineColor=color;
+			}
+		}
 	}
 	
 	public Color getColor() {
