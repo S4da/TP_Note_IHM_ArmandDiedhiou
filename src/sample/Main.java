@@ -26,4 +26,15 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    /**
+     * 
+     * 
+     * Pour réaliser l'architecture MVC de cette application, j'ai créé une classe
+     * model, une classe controller et une vue avec sceneBuilder. J'ai structuré l'application en faisant toutes
+     * qui permettent de changer la vue dans le controller, et j'ai changé les valeurs qui permettent de modifier la vue 
+     * dans le modele.
+     * 
+     * 
+     * 
+     */
 }
