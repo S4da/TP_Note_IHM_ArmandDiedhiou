@@ -18,9 +18,6 @@ public class Model {
 	int indexSelectionne=-1;
 	private Color lineColor;
 	
-	public int getSelected(){
-		return indexSelectionne;
-	}
 	
 	public void setUnselected() {
 		indexSelectionne=-1;
@@ -30,6 +27,10 @@ public class Model {
 		return selection;
 	}
 	
+	public Shape getSelected() {
+		if (indexSelectionne>=0) return listeObj.get(indexSelectionne);
+		else return null;
+	}
 	public void deselect() {
 		Shape s=listeObj.get(indexSelectionne);
 		if(s instanceof Rectangle) {

@@ -200,7 +200,26 @@ public class Controller {
             	}
             }
         });
-
+		
+		btnDelete.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+            	if (model.getPeutSelectionner()) {
+            		Shape s=model.getSelected();
+            		if (s!=null) {
+            			if (s instanceof Rectangle) {
+            				canvas.getChildren().remove((Rectangle)s);
+            			}
+            			else if (s instanceof Ellipse) {
+            				canvas.getChildren().remove((Ellipse)s);
+            			}
+            			else if (s instanceof Line) {
+            				canvas.getChildren().remove((Line)s);
+            			}
+            		}
+            	}
+            }
+        });
 	}
 	
 	
